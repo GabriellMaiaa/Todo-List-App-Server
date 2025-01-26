@@ -2,12 +2,13 @@ import express from "express";
 import router from "./routes/routes";
 import cors from "cors";
 import dotenv from "dotenv";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 dotenv.config();
 
 const app = express();
 const port = 3333;
-const token = jwt.sign(
+const token = JsonWebTokenError.sign(
   { userId: user.id },
   process.env.JWT_SECRET, // Usando o segredo armazenado no .env
   { expiresIn: "1h" }
