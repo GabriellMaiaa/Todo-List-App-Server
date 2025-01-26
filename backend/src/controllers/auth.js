@@ -51,9 +51,9 @@ export class AuthHandler {
           .json({ error: "Name and password are required." });
       }
 
-      const user = await prisma.user.findFirst({ where: { name } });
+      const user = await prisma.user.findFirst({ where: { name, password } });
 
-      if (!user) {
+      if (!user.name) {
         return res.status(401).json({ error: "Invalid user." });
       }
 
