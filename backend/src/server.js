@@ -8,11 +8,11 @@ dotenv.config();
 
 const app = express();
 const port = 3333;
-const token = jwt.sign(
-  { userId: user.id },
-  process.env.JWT_SECRET, // Usando o segredo armazenado no .env
-  { expiresIn: "1h" }
-);
+// const token = jwt.sign(
+//   { userId: user.id },
+//   process.env.JWT_SECRET, // Usando o segredo armazenado no .env
+//   { expiresIn: "1h" }
+// );
 
 app.use(cors());
 app.use(express.json());

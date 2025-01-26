@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { TodoListHandler } from "../controllers/list";
 import { AuthHandler } from "../controllers/auth";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = Router();
 
 // Rotas de autenticação
 router.post("/register", AuthHandler.register);
-router.post("/login", AuthHandler.login);
+router.post("/login", authMiddleware, AuthHandler.login);
 
 router.post("/task/create", TodoListHandler.createTask);
 router.get("/", TodoListHandler.getTasks);

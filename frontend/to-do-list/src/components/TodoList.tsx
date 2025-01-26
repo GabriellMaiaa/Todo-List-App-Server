@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Modal, Input, List, Typography, message } from "antd";
-import RegisterModal from "./RegisterModal";
+import { Button, Modal, Input, List, Typography } from "antd";
 
 const { Title } = Typography;
 
@@ -18,11 +17,12 @@ const TodoList = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTask, setNewTask] = useState({ task: "", description: "" });
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false); // Controla o modal de registro
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // Primeiro, obtemos o ID do usuário
     axios
-      .get(`${API_BASE_URL}/user`) // Endpoint para obter o usuário autenticado
+      .get(`${API_BASE_URL}/user`)
       .then((response) => {
         if (response.data?.id) {
           setUserId(response.data.id);
@@ -32,11 +32,13 @@ const TodoList = () => {
       .catch((error) => console.error("Error fetching user:", error));
   }, []);
 
-  const fetchTasks = (id: string) => {
-    axios
-      .get(`${API_BASE_URL}/task/user/${id}`)
-      .then((response) => setTasks(response.data))
-      .catch((error) => console.error("Error fetching tasks:", error));
+  const fetchTasks = async (id: string) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/task/user/${id}`);
+      setTasks(response.data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
   };
 
   const handleCreateTask = async () => {
@@ -45,25 +47,30 @@ const TodoList = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
+      console.log("Enviando requisição para criar tarefa...");
+
       const response = await axios.post(`${API_BASE_URL}/task/create`, {
         task: newTask.task,
         description: newTask.description,
         userId: userId,
       });
 
+      console.log("Resposta da API:", response);
+
       if (response.status === 201) {
+        console.log("Tarefa criada com sucesso!");
         setIsModalOpen(false);
         setNewTask({ task: "", description: "" });
         fetchTasks(userId);
       }
     } catch (error) {
       console.error("Error creating task:", error);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleRegister = () => {
-    setIsRegisterOpen(true); // Abre o modal de registro
   };
 
   return (
@@ -72,20 +79,13 @@ const TodoList = () => {
       <Button type="primary" onClick={() => setIsModalOpen(true)}>
         Create Task
       </Button>
-      <Button
-        type="default"
-        onClick={handleRegister}
-        style={{ marginLeft: 10 }}
-      >
-        Register User
-      </Button>
 
-      {/* Modal de Criação de Tarefa */}
       <Modal
         title="Create Task"
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         onOk={handleCreateTask}
+        confirmLoading={loading} // Desabilita o botão enquanto carrega
       >
         <Input
           placeholder="Task Title"
@@ -101,12 +101,6 @@ const TodoList = () => {
           style={{ marginTop: 10 }}
         />
       </Modal>
-
-      {/* Modal de Registro de Usuário */}
-      <RegisterModal
-        isOpen={isRegisterOpen}
-        onClose={() => setIsRegisterOpen(false)}
-      />
 
       <List
         itemLayout="horizontal"
