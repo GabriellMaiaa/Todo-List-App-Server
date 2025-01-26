@@ -7,7 +7,9 @@ const router = Router();
 
 // Rotas de autenticação
 router.post("/register", AuthHandler.register);
-router.post("/login", authMiddleware, AuthHandler.login);
+router.post("/login", AuthHandler.login);
+
+router.use(authMiddleware);
 
 router.post("/task/create", TodoListHandler.createTask);
 router.get("/", TodoListHandler.getTasks);

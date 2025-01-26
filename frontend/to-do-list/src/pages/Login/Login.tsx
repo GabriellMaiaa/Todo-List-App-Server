@@ -16,16 +16,13 @@ const Login = () => {
       setLoading(true);
       const values = await form.validateFields();
 
-      // Enviar dados para o backend
       const response = await axios.post(API_BASE_URL, values);
 
       if (response.status === 200) {
-        // Armazenar os dados do usuário no localStorage após o login
-        localStorage.setItem("userData", JSON.stringify(response.data)); // Supondo que o backend retorne os dados do usuário
+        localStorage.setItem("userData", JSON.stringify(response.data));
 
         message.success("Login successful!");
 
-        // Redirecionar para a página de tarefas (List)
         navigate("/list");
       }
     } catch (error) {
