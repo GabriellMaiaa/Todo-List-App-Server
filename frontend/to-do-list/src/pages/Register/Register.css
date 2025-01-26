@@ -1,0 +1,17 @@
+/* Para o Register */
+.register-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.register-container .login-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.register-container .login-link a {
+  text-decoration: none;
+  color: #1890ff;
+}

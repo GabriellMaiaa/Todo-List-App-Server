@@ -58,11 +58,16 @@ export class AuthHandler {
       }
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
+      console.log(password, user.password); // Verifique as senhas
       if (!isPasswordValid) {
         return res.status(401).json({ error: "Invalid credentials." });
       }
 
-      const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: "1h" });
+      const token = jwt.sign(
+        { userId: user.id },
+        process.env.JWT_SECRET, // Usando o segredo armazenado no .env
+        { expiresIn: "1h" }
+      );
 
       return res.json({ message: "Login successful!", token });
     } catch (error) {

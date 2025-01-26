@@ -1,7 +1,7 @@
-// src/components/TodoList.tsx
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Modal, Input, List, Typography } from "antd";
+import { Button, Modal, Input, List, Typography, message } from "antd";
+import RegisterModal from "./RegisterModal";
 
 const { Title } = Typography;
 
@@ -11,49 +11,59 @@ interface Task {
   description: string;
 }
 
+const API_BASE_URL = "https://todo-list-app-server-znwp.onrender.com/list";
+
 const TodoList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [userId, setUserId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTask, setNewTask] = useState({ task: "", description: "" });
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false); // Controla o modal de registro
 
   useEffect(() => {
-    // Fetch tasks from the backend
     axios
-      .get(
-        "http://localhost:3000/task/user/02887485-a4c8-43c9-b069-9670e8b869c2"
-      )
-      .then((response) => setTasks(response.data))
-      .catch((error) => console.error("Error fetching tasks:", error));
+      .get(`${API_BASE_URL}/user`) // Endpoint para obter o usuário autenticado
+      .then((response) => {
+        if (response.data?.id) {
+          setUserId(response.data.id);
+          fetchTasks(response.data.id);
+        }
+      })
+      .catch((error) => console.error("Error fetching user:", error));
   }, []);
 
-  const handleCreateTask = async () => {
-    try {
-      // Verificar se os campos não estão vazios
-      if (!newTask.task || !newTask.description) {
-        console.error("Task or description is missing.");
-        return;
-      }
+  const fetchTasks = (id: string) => {
+    axios
+      .get(`${API_BASE_URL}/task/user/${id}`)
+      .then((response) => setTasks(response.data))
+      .catch((error) => console.error("Error fetching tasks:", error));
+  };
 
-      // Enviar a nova tarefa para o backend
-      const response = await axios.post("http://localhost:3000/task", {
+  const handleCreateTask = async () => {
+    if (!newTask.task || !newTask.description || !userId) {
+      console.error("Missing task details or user ID.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/task/create`, {
         task: newTask.task,
         description: newTask.description,
-        userId: "02887485-a4c8-43c9-b069-9670e8b869c2",
+        userId: userId,
       });
 
-      // Verifica se a resposta do backend foi bem-sucedida
       if (response.status === 201) {
         setIsModalOpen(false);
         setNewTask({ task: "", description: "" });
-        // Refaz a requisição para buscar todas as tasks
-        const tasksResponse = await axios.get(
-          "http://localhost:3000/task/user/02887485-a4c8-43c9-b069-9670e8b869c2"
-        );
-        setTasks(tasksResponse.data);
+        fetchTasks(userId);
       }
     } catch (error) {
       console.error("Error creating task:", error);
     }
+  };
+
+  const handleRegister = () => {
+    setIsRegisterOpen(true); // Abre o modal de registro
   };
 
   return (
@@ -62,10 +72,18 @@ const TodoList = () => {
       <Button type="primary" onClick={() => setIsModalOpen(true)}>
         Create Task
       </Button>
+      <Button
+        type="default"
+        onClick={handleRegister}
+        style={{ marginLeft: 10 }}
+      >
+        Register User
+      </Button>
 
+      {/* Modal de Criação de Tarefa */}
       <Modal
         title="Create Task"
-        visible={isModalOpen}
+        open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         onOk={handleCreateTask}
       >
@@ -83,6 +101,12 @@ const TodoList = () => {
           style={{ marginTop: 10 }}
         />
       </Modal>
+
+      {/* Modal de Registro de Usuário */}
+      <RegisterModal
+        isOpen={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+      />
 
       <List
         itemLayout="horizontal"
