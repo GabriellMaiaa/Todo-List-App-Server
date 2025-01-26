@@ -4,6 +4,7 @@ import router from "./routes/routes";
 const app = express();
 const port = 3333;
 
+app.use(cors());
 app.use(express.json());
 app.use("/list", router);
 
