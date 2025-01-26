@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const prisma = new PrismaClient();
-const SECRET = process.env.JWT_SECRET || "supersecret";
+const SECRET = process.env.JWT_SECRET || "maiagg123";
 
 export class AuthHandler {
   static async register(req, res) {
@@ -23,12 +23,12 @@ export class AuthHandler {
         return res.status(400).json({ error: "Name is already taken." });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      // const hashedPassword = await bcrypt.hash(password, 10);
 
       const user = await prisma.user.create({
         data: {
           name,
-          password: hashedPassword,
+          password,
           jobTitle,
         },
       });
@@ -51,19 +51,19 @@ export class AuthHandler {
           .json({ error: "Name and password are required." });
       }
 
-      const user = await prisma.user.findUnique({ where: { name } });
+      const user = await prisma.user.findFirst({ where: { name } });
 
       if (!user) {
-        return res.status(401).json({ error: "Invalid credentials." });
+        return res.status(401).json({ error: "Invalid user." });
       }
 
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (!isPasswordValid) {
-        return res.status(401).json({ error: "Invalid credentials." });
+      if (!user.password) {
+        return res.status(401).json({ error: "Invalid password." });
       }
 
-      const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: "1h" });
+      const token = jwt.sign({ userId: user.id }, SECRET, {
+        expiresIn: "1h",
+      });
 
       // Enviar o token na resposta
       return res.json({ message: "Login successful!", token, userId: user.id });
