@@ -38,6 +38,15 @@ export class TodoListHandler {
     const todos = await prisma.list.findMany();
     return res.json(todos);
   }
+  static async getUser(req, res) {
+    const { userId } = req.params;
+    const task = await prisma.list.findUnique({
+      where: { userId },
+    });
+
+    return res.json(task);
+  }
+
   static async getTaskById(req, res) {
     try {
       const { id } = req.params;
@@ -100,6 +109,7 @@ export class TodoListHandler {
   }
   static async updateTaskCompletedById(req, res) {
     const { id } = req.params;
+    const { completed } = req.body;
 
     const todo = await prisma.list.findUnique({ where: { id } });
     if (!todo) {
@@ -108,7 +118,7 @@ export class TodoListHandler {
 
     const updatedTodo = await prisma.list.update({
       where: { id },
-      data: { completed: true },
+      data: { completed },
     });
 
     return res.json(updatedTodo);
