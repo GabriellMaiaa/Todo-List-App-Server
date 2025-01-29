@@ -23,6 +23,7 @@ const Register = () => {
       if (response.status === 201) {
         message.success("User successfully registered!");
         form.resetFields();
+        navigate("/login");
       }
     } catch (error) {
       console.error("Registration error:", error);

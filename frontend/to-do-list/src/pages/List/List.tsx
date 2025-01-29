@@ -341,17 +341,7 @@ const List = () => {
         />
       </Modal>
 
-      <div
-        style={{
-          maxHeight: "520px",
-          overflowY: "auto",
-          marginTop: "8rem",
-          paddingRight: "10px",
-          overflow: "auto",
-          scrollbarWidth: "thin",
-          scrollbarColor: "#888 #f1f1f1",
-        }}
-      >
+      <div className="task-scroll">
         {filteredTasks.length > 0 ? (
           filteredTasks.map((task) => (
             <Card
