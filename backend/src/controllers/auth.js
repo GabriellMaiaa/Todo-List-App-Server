@@ -23,8 +23,6 @@ export class AuthHandler {
         return res.status(400).json({ error: "Name is already taken." });
       }
 
-      // const hashedPassword = await bcrypt.hash(password, 10);
-
       const user = await prisma.user.create({
         data: {
           name,

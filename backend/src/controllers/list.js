@@ -13,18 +13,16 @@ export class TodoListHandler {
           .json({ error: "Task and userId are mandatory." });
       }
 
-      // Verifica se o usuário existe
       const user = await prisma.user.findUnique({ where: { id: userId } });
       if (!user) {
         return res.status(404).json({ error: "User not found." });
       }
 
-      // Cria a task associada ao usuário
       const newTask = await prisma.list.create({
         data: {
           task,
           description,
-          userId, // Alteração: Inserindo userId diretamente
+          userId,
         },
       });
 
@@ -69,12 +67,10 @@ export class TodoListHandler {
     try {
       const { userId } = req.params;
 
-      // Verifica se o userId foi passado
       if (!userId) {
         return res.status(400).json({ error: "User ID is required." });
       }
 
-      // Verifica se o usuário existe
       const user = await prisma.user.findUnique({
         where: { id: userId },
       });
@@ -88,7 +84,6 @@ export class TodoListHandler {
         where: { userId },
       });
 
-      // Retorna as tasks do usuário
       return res.status(200).json(tasks);
     } catch (error) {
       console.error("Error fetching user tasks:", error);

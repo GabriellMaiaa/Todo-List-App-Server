@@ -5,7 +5,6 @@ import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = Router();
 
-// Rotas de autenticação
 router.post("/register", AuthHandler.register);
 router.post("/login", AuthHandler.login);
 
@@ -18,5 +17,6 @@ router.get("/task/user/:userId", TodoListHandler.getTasksByUser);
 router.put("/task/edit/:id", TodoListHandler.updateTaskById);
 router.patch("/task/completed/:id", TodoListHandler.updateTaskCompletedById);
 router.delete("/task/delete/:id", TodoListHandler.deleteTaskById);
+router.get("user/:id");
 
 export default router;

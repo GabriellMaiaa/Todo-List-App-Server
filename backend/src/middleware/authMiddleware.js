@@ -8,7 +8,7 @@ export function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   console.log("Header Authorization:", authHeader);
   if (!authHeader) {
-    return res.status(401).json({ error: "Token não fornecido." });
+    return res.status(401).json({ error: "Token not provided." });
   }
 
   const token = authHeader.split(" ")[1];
@@ -19,8 +19,8 @@ export function authMiddleware(req, res, next) {
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      return res.status(401).json({ error: "Token expirado." });
+      return res.status(401).json({ error: "Expired Token." });
     }
-    return res.status(401).json({ error: "Token inválido." });
+    return res.status(401).json({ error: "Invalid Token." });
   }
 }

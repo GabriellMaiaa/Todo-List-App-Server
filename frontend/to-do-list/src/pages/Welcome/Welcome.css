@@ -1,7 +1,7 @@
 .container {
   display: flex;
   justify-content: center;
-  align-items: center; /* Alinha o conteúdo verticalmente */
+  align-items: center;
   flex-direction: column;
 }
 body {
@@ -11,6 +11,7 @@ body {
   min-height: 100vh;
   align-items: center;
   justify-content: center;
+  color: #333333;
 }
 .content {
   display: flex;
