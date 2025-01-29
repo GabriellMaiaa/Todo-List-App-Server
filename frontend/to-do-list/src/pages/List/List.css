@@ -86,11 +86,103 @@ div::-webkit-scrollbar-track {
 }
 
 .task-scroll {
-  max-height: 520px;
-  margin-top: 7rem;
   overflow-y: auto;
 }
 
 .task-scroll.scrollable {
   overflow-y: auto;
+}
+
+@media (max-width: 1998px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .header {
+    margin-top: 4rem;
+  }
+
+  .task-card {
+    width: 100%;
+    margin: 8px 0;
+    height: auto;
+  }
+
+  .task-scroll {
+    max-height: 430px;
+    margin-top: 8rem;
+  }
+
+  .logout-container {
+    margin-top: 1.5rem;
+    flex-direction: column;
+  }
+
+  .task-card input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .logout-button {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.5rem;
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .header {
+    margin-top: 4rem;
+  }
+
+  .task-card {
+    width: 100%;
+    margin: 8px 0;
+    height: auto;
+  }
+
+  .task-scroll {
+    max-height: 300px;
+    margin-top: 5rem;
+  }
+
+  .logout-container {
+    margin-top: 1.5rem;
+    flex-direction: column;
+  }
+
+  .task-card input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .logout-button {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    margin-top: 3rem;
+  }
+
+  .task-card {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .task-card input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+  }
+
+  .task-scroll {
+    max-height: 300px;
+    margin-top: 4rem;
+  }
 }
