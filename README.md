@@ -14,7 +14,7 @@
 
 ## 🌐 Live Demo
 You can access the live version here:  
-🔗 [AllYouHaveToDo](https://to-do-list-5kbwzdkt2-gabriellmaiaas-projects.vercel.app/)
+🔗 [AllYouHaveToDo](https://to-do-list-two-mauve-92.vercel.app/)
 
 ## 📂 Backend Repository
 The backend is available at:  
